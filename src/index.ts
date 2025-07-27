@@ -1,10 +1,34 @@
 #!/usr/bin/env node
 
-console.log('PromptForge MCP Server starting...');
+import { createMCPServer } from './server/mcp-server.js';
+import {
+  createServerConfig,
+  createStdioTransport,
+  connectTransport,
+} from './server/transport.js';
 
-// TODO: Initialize MCP server here
+console.error('PromptForge MCP Server starting...');
+
 const main = async (): Promise<void> => {
-  console.log('Server initialized');
+  try {
+    // Create server configuration
+    const config = createServerConfig();
+    console.error(`Initializing ${config.name} v${config.version}`);
+
+    // Create MCP server
+    const server = createMCPServer(config);
+
+    // Create stdio transport for Cursor integration
+    const transport = createStdioTransport();
+
+    // Connect server to transport
+    await connectTransport(server, transport);
+
+    console.error('PromptForge MCP server ready');
+  } catch (error) {
+    console.error('Failed to initialize MCP server:', error);
+    throw error;
+  }
 };
 
 main().catch((error) => {
