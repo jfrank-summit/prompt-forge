@@ -17,7 +17,8 @@
     "test:features": "tsx src/test/mcp-handlers.test.ts",
     "test:server": "tsx src/test/mcp-server-direct.test.ts",
     "test:yaml": "tsx src/test/yaml-parser.test.ts",
-    "test:all": "yarn test:features && yarn test:server && yarn test:yaml"
+    "test:resources": "tsx src/test/resource-discovery.test.ts",
+    "test:all": "yarn test:features && yarn test:server && yarn test:yaml && yarn test:resources"
   },
   "keywords": [
     "ai",

@@ -7,6 +7,7 @@ import {
   ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { createLogger } from './logger.js';
+import { PromptResourceManager } from './resource-handlers.js';
 
 const logger = createLogger('mcp-server');
 
@@ -26,7 +27,49 @@ export const createMCPServer = () => {
     },
   );
 
-  // Set up request handlers exactly like the docs
+  // Initialize prompt resource manager
+  const resourceManager = new PromptResourceManager();
+
+  // Resource handlers for prompt discovery
+  server.setRequestHandler(ListResourcesRequestSchema, async () => {
+    logger.debug('Handling ListResourcesRequestSchema');
+    try {
+      const resources = await resourceManager.listResources();
+      return { resources };
+    } catch (error) {
+      logger.logError(error as Error, 'Failed to list resources');
+      throw error;
+    }
+  });
+
+  server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
+    logger.debug('Handling ListResourceTemplatesRequestSchema');
+    try {
+      const resourceTemplates = await resourceManager.listResourceTemplates();
+      return { resourceTemplates };
+    } catch (error) {
+      logger.logError(error as Error, 'Failed to list resource templates');
+      throw error;
+    }
+  });
+
+  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    logger.info('Handling ReadResourceRequestSchema', {
+      uri: request.params.uri,
+    });
+
+    try {
+      return await resourceManager.readResource(request.params.uri);
+    } catch (error) {
+      logger.logError(
+        error as Error,
+        `Failed to read resource: ${request.params.uri}`,
+      );
+      throw error;
+    }
+  });
+
+  // Tool handlers (keeping test tool for now)
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     logger.debug('Handling ListToolsRequestSchema');
     return {
@@ -69,54 +112,8 @@ export const createMCPServer = () => {
     throw new Error(`Unknown tool: ${request.params.name}`);
   });
 
-  server.setRequestHandler(ListResourcesRequestSchema, async () => {
-    logger.debug('Handling ListResourcesRequestSchema');
-    return {
-      resources: [
-        {
-          uri: 'test://example',
-          name: 'Test Resource',
-          description: 'A simple test resource',
-          mimeType: 'text/plain',
-        },
-      ],
-    };
-  });
-
-  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
-    logger.info('Handling ReadResourceRequestSchema', {
-      uri: request.params.uri,
-    });
-
-    if (request.params.uri === 'test://example') {
-      return {
-        contents: [
-          {
-            uri: request.params.uri,
-            mimeType: 'text/plain',
-            text: 'This is a test resource content!',
-          },
-        ],
-      };
-    }
-
-    throw new Error(`Unknown resource: ${request.params.uri}`);
-  });
-
-  server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
-    logger.debug('Handling ListResourceTemplatesRequestSchema');
-    return {
-      resourceTemplates: [
-        {
-          uriTemplate: 'test://{name}',
-          name: 'Test Template',
-          description: 'A simple test template',
-          mimeType: 'text/plain',
-        },
-      ],
-    };
-  });
-
-  logger.info('PromptForge MCP server configured with basic handlers');
+  logger.info(
+    'PromptForge MCP server configured with prompt resource handlers',
+  );
   return server;
 };
