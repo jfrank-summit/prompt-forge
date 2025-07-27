@@ -4,6 +4,7 @@
 
 - Use TypeScript for all new files
 - Prefer yarn over npm for package management
+- Disable Yarn PnP - use node_modules for package management
 - Use arrow functions instead of function declarations
 - Prioritize immutability and functional programming patterns
 - Avoid classes; use functional programming patterns instead
