@@ -16,7 +16,8 @@
     "inspector": "npx @modelcontextprotocol/inspector yarn dev",
     "test:features": "tsx src/test/mcp-handlers.test.ts",
     "test:server": "tsx src/test/mcp-server-direct.test.ts",
-    "test:all": "yarn test:features && yarn test:server"
+    "test:yaml": "tsx src/test/yaml-parser.test.ts",
+    "test:all": "yarn test:features && yarn test:server && yarn test:yaml"
   },
   "keywords": [
     "ai",
@@ -27,9 +28,12 @@
   "author": "PromptForge",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.0"
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "js-yaml": "^4.1.0",
+    "zod": "^4.0.10"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "24.1.0",
     "@typescript-eslint/eslint-plugin": "8.38.0",
     "@typescript-eslint/parser": "8.38.0",
