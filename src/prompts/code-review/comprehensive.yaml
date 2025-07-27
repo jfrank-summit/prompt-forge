@@ -1,0 +1,45 @@
+name: 'comprehensive-code-review'
+title: 'Comprehensive Code Review'
+description: 'Thorough code review covering quality, security, and best practices'
+category: 'code-review'
+tags: ['review', 'quality', 'security', 'best-practices']
+
+variables:
+  - name: 'language'
+    type: 'enum'
+    required: true
+    values: ['TypeScript', 'JavaScript', 'Python', 'Go', 'Rust']
+    description: 'Programming language of the code'
+
+  - name: 'context'
+    type: 'text'
+    required: false
+    max_length: 500
+    description: 'Additional context about the code or project'
+
+examples:
+  - title: 'TypeScript React Component'
+    variables:
+      language: 'TypeScript'
+      context: 'React functional component with hooks'
+
+  - title: 'Python API Endpoint'
+    variables:
+      language: 'Python'
+      context: 'FastAPI endpoint for user authentication'
+
+template: |
+  Please conduct a comprehensive code review of the following {{language}} code.
+
+  {{#if context}}
+  Context: {{context}}
+  {{/if}}
+
+  Focus on these areas:
+  1. Code quality and readability
+  2. Security vulnerabilities
+  3. Performance considerations
+  4. Best practices for {{language}}
+  5. Maintainability and documentation
+
+  Provide specific, actionable feedback with examples where possible.

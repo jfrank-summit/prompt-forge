@@ -1,0 +1,32 @@
+name: 'api-documentation'
+title: 'API Documentation Generator'
+description: 'Generate comprehensive API documentation from code'
+category: 'documentation'
+tags: ['api', 'documentation', 'openapi', 'swagger']
+
+variables:
+  - name: 'api_type'
+    type: 'enum'
+    required: true
+    values: ['REST', 'GraphQL', 'gRPC']
+    description: 'Type of API to document'
+
+  - name: 'include_examples'
+    type: 'boolean'
+    required: false
+    default: true
+    description: 'Include request/response examples'
+
+template: |
+  Please generate comprehensive documentation for this {{api_type}} API.
+
+  Requirements:
+  1. Clear endpoint descriptions
+  2. Parameter specifications
+  3. Response schemas
+  {{#if include_examples}}
+  4. Request and response examples
+  {{/if}}
+  5. Error handling documentation
+
+  Make the documentation developer-friendly and include all necessary details for integration.

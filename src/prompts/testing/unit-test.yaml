@@ -1,0 +1,24 @@
+name: 'unit-test-generator'
+title: 'Unit Test Generator'
+description: 'Generate comprehensive unit tests for code functions'
+category: 'testing'
+tags: ['testing', 'unit-tests', 'coverage']
+
+variables:
+  - name: 'framework'
+    type: 'enum'
+    required: true
+    values: ['Jest', 'Vitest', 'Mocha', 'PyTest', 'Go Test']
+    description: 'Testing framework to use'
+
+template: |
+  Generate comprehensive unit tests for the following code using {{framework}}.
+
+  Include:
+  1. Happy path tests
+  2. Edge case tests
+  3. Error handling tests
+  4. Mock dependencies where needed
+  5. Clear test descriptions
+
+  Ensure good test coverage and follow {{framework}} best practices.
