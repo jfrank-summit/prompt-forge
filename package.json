@@ -12,7 +12,11 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "inspector": "npx @modelcontextprotocol/inspector yarn dev",
+    "test:features": "tsx src/test/mcp-handlers.test.ts",
+    "test:server": "tsx src/test/mcp-server-direct.test.ts",
+    "test:all": "yarn test:features && yarn test:server"
   },
   "keywords": [
     "ai",

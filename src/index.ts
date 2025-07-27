@@ -24,7 +24,7 @@ const main = async (): Promise<void> => {
     });
 
     // Create MCP server
-    const server = createMCPServer(config);
+    const server = createMCPServer();
 
     // Create stdio transport for Cursor integration
     const transport = createStdioTransport();
