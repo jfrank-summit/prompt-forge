@@ -7,6 +7,9 @@ import {
   ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import type { MCPServerConfig } from '../types/mcp.js';
+import { createLogger } from './logger.js';
+
+const logger = createLogger('mcp-server');
 
 // Create and configure MCP server (basic setup)
 export const createMCPServer = (config: MCPServerConfig): Server => {
@@ -59,7 +62,7 @@ export const createMCPServer = (config: MCPServerConfig): Server => {
     );
   });
 
-  console.error('MCP server created with proper SDK request handlers');
+  logger.info('MCP server created with proper SDK request handlers');
 
   return server;
 };

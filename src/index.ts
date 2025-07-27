@@ -6,14 +6,22 @@ import {
   createStdioTransport,
   connectTransport,
 } from './server/transport.js';
+import { createLogger, configureLogging } from './server/logger.js';
 
-console.error('PromptForge MCP Server starting...');
+// Configure logging first
+configureLogging();
+
+const logger = createLogger('main');
+logger.info('PromptForge MCP Server starting...');
 
 const main = async (): Promise<void> => {
   try {
     // Create server configuration
     const config = createServerConfig();
-    console.error(`Initializing ${config.name} v${config.version}`);
+    logger.info('Initializing server', {
+      name: config.name,
+      version: config.version,
+    });
 
     // Create MCP server
     const server = createMCPServer(config);
@@ -24,14 +32,14 @@ const main = async (): Promise<void> => {
     // Connect server to transport
     await connectTransport(server, transport);
 
-    console.error('PromptForge MCP server ready');
+    logger.info('PromptForge MCP server ready');
   } catch (error) {
-    console.error('Failed to initialize MCP server:', error);
+    logger.logError(error as Error, 'Failed to initialize MCP server');
     throw error;
   }
 };
 
 main().catch((error) => {
-  console.error('Failed to start server:', error);
+  logger.logError(error as Error, 'Failed to start server');
   process.exit(1);
 });
