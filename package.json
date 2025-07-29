@@ -18,7 +18,8 @@
     "test:server": "tsx src/test/mcp-server-direct.test.ts",
     "test:yaml": "tsx src/test/yaml-parser.test.ts",
     "test:resources": "tsx src/test/resource-discovery.test.ts",
-    "test:all": "yarn test:features && yarn test:server && yarn test:yaml && yarn test:resources"
+    "test:tools": "tsx src/test/tool-execution.test.ts",
+    "test:all": "yarn test:features && yarn test:server && yarn test:yaml && yarn test:resources && yarn test:tools"
   },
   "keywords": [
     "ai",
@@ -30,10 +31,12 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
+    "handlebars": "^4.7.8",
     "js-yaml": "^4.1.0",
     "zod": "^4.0.10"
   },
   "devDependencies": {
+    "@types/handlebars": "^4.1.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "24.1.0",
     "@typescript-eslint/eslint-plugin": "8.38.0",

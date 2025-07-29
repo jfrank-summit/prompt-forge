@@ -8,6 +8,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { createLogger } from './logger.js';
 import { PromptResourceManager } from './resource-handlers.js';
+import { listPromptTools, callPromptTool } from './tool-handlers.js';
 
 const logger = createLogger('mcp-server');
 
@@ -30,7 +31,38 @@ export const createMCPServer = () => {
   // Initialize prompt resource manager
   const resourceManager = new PromptResourceManager();
 
-  // Resource handlers for prompt discovery
+  // Tool handlers for prompt execution
+  server.setRequestHandler(ListToolsRequestSchema, async () => {
+    logger.debug('Handling ListToolsRequestSchema');
+    try {
+      const tools = await listPromptTools();
+      return { tools };
+    } catch (error) {
+      logger.logError(error as Error, 'Failed to list tools');
+      throw error;
+    }
+  });
+
+  server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    logger.debug('Handling CallToolRequestSchema', {
+      tool: request.params.name,
+    });
+
+    try {
+      return await callPromptTool(
+        request.params.name,
+        request.params.arguments || {},
+      );
+    } catch (error) {
+      logger.logError(
+        error as Error,
+        `Failed to call tool: ${request.params.name}`,
+      );
+      throw error;
+    }
+  });
+
+  // Resource handlers for prompt discovery (kept for future when Cursor supports resources)
   server.setRequestHandler(ListResourcesRequestSchema, async () => {
     logger.debug('Handling ListResourcesRequestSchema');
     try {
@@ -69,51 +101,8 @@ export const createMCPServer = () => {
     }
   });
 
-  // Tool handlers (keeping test tool for now)
-  server.setRequestHandler(ListToolsRequestSchema, async () => {
-    logger.debug('Handling ListToolsRequestSchema');
-    return {
-      tools: [
-        {
-          name: 'test-tool',
-          description: 'A simple test tool',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              message: {
-                type: 'string',
-                description: 'A test message',
-              },
-            },
-            required: ['message'],
-          },
-        },
-      ],
-    };
-  });
-
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    logger.debug('Handling CallToolRequestSchema', {
-      tool: request.params.name,
-    });
-
-    if (request.params.name === 'test-tool') {
-      const args = request.params.arguments || {};
-      return {
-        content: [
-          {
-            type: 'text',
-            text: `Hello! You said: ${args.message || 'nothing'}`,
-          },
-        ],
-      };
-    }
-
-    throw new Error(`Unknown tool: ${request.params.name}`);
-  });
-
   logger.info(
-    'PromptForge MCP server configured with prompt resource handlers',
+    'PromptForge MCP server configured with prompt execution tools and resource handlers',
   );
   return server;
 };
