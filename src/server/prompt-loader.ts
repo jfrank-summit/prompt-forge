@@ -41,7 +41,16 @@ export const loadPrompts = async (
   config: PromptLoaderConfig,
 ): Promise<ParsedPrompt[]> => {
   try {
-    logger.info('Loading prompts', { directory: config.promptsDirectory });
+    logger.info('Loading prompts', {
+      directory: config.promptsDirectory,
+      cwd: process.cwd(),
+      exists: await import('fs').then((fs) =>
+        fs.promises
+          .access(config.promptsDirectory)
+          .then(() => true)
+          .catch(() => false),
+      ),
+    });
 
     // Reset stats
     loaderStats = {
