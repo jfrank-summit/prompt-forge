@@ -41,18 +41,20 @@ export const listPromptTools = async (): Promise<Tool[]> => {
   return [
     {
       name: 'execute-prompt',
-      description: 'Render a prompt with variable substitution',
+      description:
+        'Execute and render a specialized prompt template for coding tasks like code reviews, documentation generation, or test creation. Use this when you need structured, professional output for development workflows. Provides Handlebars templating with variable substitution for dynamic prompts.',
       inputSchema: {
         type: 'object',
         properties: {
           promptUri: {
             type: 'string',
             description:
-              'Prompt resource URI (e.g., prompt://prompt/code-review/comprehensive-code-review)',
+              'Prompt resource URI (e.g., prompt://prompt/code-review/comprehensive-code-review). Use search-prompts first to discover available prompts.',
           },
           variables: {
             type: 'object',
-            description: 'Variables for template substitution',
+            description:
+              'Variables for template substitution (e.g., {"language": "TypeScript", "context": "React component"})',
             additionalProperties: true,
           },
         },
@@ -61,22 +63,26 @@ export const listPromptTools = async (): Promise<Tool[]> => {
     },
     {
       name: 'search-prompts',
-      description: 'Find prompts matching specific criteria',
+      description:
+        'Discover available prompt templates for development tasks. Search by keywords like "code review", "documentation", "testing", or "api". Always use this first to find the right prompt before executing it.',
       inputSchema: {
         type: 'object',
         properties: {
           query: {
             type: 'string',
-            description: 'Search query to find prompts',
+            description:
+              'Search terms like "code review", "documentation", "testing", "unit test", "api docs" to find relevant prompts',
           },
           category: {
             type: 'string',
-            description: 'Filter by category (optional)',
+            description:
+              'Filter by category: "code-review", "documentation", "testing" (optional)',
           },
           tags: {
             type: 'array',
             items: { type: 'string' },
-            description: 'Filter by tags (optional)',
+            description:
+              'Filter by tags like "review", "quality", "security", "api", "testing" (optional)',
           },
         },
         required: ['query'],
